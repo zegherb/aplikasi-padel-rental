@@ -18,8 +18,11 @@ Docker Engine (Linux / macOS):
 
 - Pastikan Docker Engine dan Compose tersedia.
 - Dari direktori proyek jalankan:
+```bash
+sudo docker compose up --build -d
 
-  sudo docker compose up --build -d
+```
+  
 
 - Akses aplikasi di: `http://localhost:8080`
 
@@ -27,8 +30,9 @@ Docker Desktop (Windows):
 
 - Buka PowerShell atau WSL2 terminal di folder proyek.
 - Jalankan (tanpa `sudo`):
-
+```bash
   docker compose up --build -d
+```
 
 - Akses aplikasi di: `http://localhost:8080`
 
