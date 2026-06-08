@@ -14,8 +14,6 @@ def get_db_connection():
     )
 
 def update_status_otomatis(cursor, conn):
-    # Logika pintar MySQL: Jika Waktu Sekarang >= (Tanggal + Jam Mulai + Durasi)
-    # Maka otomatis ubah status 'Aktif' menjadi 'Selesai'
     cursor.execute("""
         UPDATE reservasi 
         SET status = 'Selesai' 
@@ -29,7 +27,7 @@ def index():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # 1. Update status otomatis setiap kali halaman dashboard dimuat
+   
     update_status_otomatis(cursor, conn)
     
     cursor.execute("SELECT * FROM lapangan")
@@ -60,7 +58,7 @@ def tambah_sewa():
         jam = request.form['jam_mulai']
         durasi = request.form['durasi_jam']
         
-        # Validasi Backend: Tolak jika user memanipulasi inspect element untuk kirim tanggal kemarin
+        
         if tanggal < hari_ini:
             return "Error: Tidak dapat memesan untuk tanggal yang sudah lewat!", 400
 
@@ -101,7 +99,7 @@ def update_sewa(id):
     cursor = conn.cursor()
     hari_ini = date.today().strftime('%Y-%m-%d')
     
-    # Cek dulu statusnya. Cegah akses kalau sudah Batal/Selesai
+    
     cursor.execute("SELECT status FROM reservasi WHERE id = %s", (id,))
     cek_status = cursor.fetchone()
     
@@ -136,18 +134,18 @@ def update_sewa(id):
 def batalkan_sewa(id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Pastikan yang bisa dibatalkan hanya yang masih 'Aktif'
+    
     cursor.execute("UPDATE reservasi SET status='Dibatalkan' WHERE id=%s AND status='Aktif'", (id,))
     conn.commit()
     conn.close()
     return redirect(url_for('index'))
 
-# DELETE PERMANEN: Hapus Riwayat Sewa
+
 @app.route('/hapus/<int:id>')
 def hapus_sewa(id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    # Validasi Backend: Pastikan hanya menghapus yang statusnya Dibatalkan atau Selesai
+    
     cursor.execute("DELETE FROM reservasi WHERE id=%s AND status IN ('Dibatalkan', 'Selesai')", (id,))
     conn.commit()
     conn.close()
