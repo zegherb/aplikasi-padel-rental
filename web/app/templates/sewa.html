@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">{{ 'Edit Data Sewa' if data else 'Form Sewa Lapangan Baru' }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label>Nama Penyewa</label>
+                        <input type="text" name="nama_penyewa" class="form-control" required 
+                               value="{{ data.nama_penyewa if data else '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label>Pilih Lapangan</label>
+                        <select name="lapangan_id" class="form-select" required>
+                            <option value="">-- Pilih Lapangan --</option>
+                            {% for lap in lapangan %}
+                            <option value="{{ lap.id }}" 
+                                {% if data and data.lapangan_id == lap.id %}selected{% endif %}>
+                                {{ lap.nama_lapangan }} (Rp {{ "{:,.0f}".format(lap.harga_per_jam) }}/Jam)
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>Tanggal Main</label>
+                            <input type="date" name="tanggal" class="form-control" required
+                                   min="{{ hari_ini }}"
+                                   value="{{ data.tanggal if data else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>Jam Mulai</label>
+                            <input type="time" name="jam_mulai" class="form-control" required
+                                   value="{{ data.jam_mulai if data else '' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label>Durasi (Jam)</label>
+                            <input type="number" name="durasi_jam" class="form-control" min="1" required
+                                   value="{{ data.durasi_jam if data else '1' }}">
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Simpan Reservasi</button>
+                    <a href="/" class="btn btn-secondary">Kembali</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

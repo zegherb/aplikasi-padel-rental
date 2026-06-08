@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Detail Reservasi #{{ detail.id }}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td width="40%"><strong>Nama Penyewa</strong></td>
+                        <td>: {{ detail.nama_penyewa }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status</strong></td>
+                        <td>: 
+                            <span class="badge {% if detail.status == 'Aktif' %}bg-primary{% elif detail.status == 'Dibatalkan' %}bg-danger{% else %}bg-success{% endif %}">
+                                {{ detail.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lapangan</strong></td>
+                        <td>: {{ detail.nama_lapangan }} ({{ detail.tipe }})</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jadwal</strong></td>
+                        <td>: {{ detail.tanggal }} | Jam {{ detail.jam_mulai }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Durasi</strong></td>
+                        <td>: {{ detail.durasi_jam }} Jam</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Harga per Jam</strong></td>
+                        <td>: Rp {{ "{:,.0f}".format(detail.harga_per_jam) }}</td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td><strong>Total Tagihan</strong></td>
+                        <td><strong>: Rp {{ "{:,.0f}".format(detail.total_harga) }}</strong></td>
+                    </tr>
+                </table>
+                <hr>
+                <div class="text-center">
+                    {% if detail.status == 'Aktif' %}
+                        <a href="/update/{{ detail.id }}" class="btn btn-warning">Edit Data</a>
+                    {% elif detail.status == 'Dibatalkan' or detail.status == 'Selesai' %}
+                        <a href="/hapus/{{ detail.id }}" class="btn btn-dark" onclick="return confirm('Yakin ingin menghapus riwayat pesanan ini secara permanen?')">Hapus Riwayat</a>
+                    {% endif %}
+                    <a href="/" class="btn btn-secondary">Kembali</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
